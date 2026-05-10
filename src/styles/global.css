@@ -1,0 +1,241 @@
+/* Consentus — design tokens and base styles */
+
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  /* Colors */
+  --color-bg: #FAFAF7;
+  --color-bg-secondary: #F5F4EE;
+  --color-text: #1A1A1A;
+  --color-text-muted: #555550;
+  --color-text-faint: #6B6B6B;
+  --color-border: #E5E5E0;
+  --color-border-strong: #C8C7BF;
+  --color-accent: #1F4E4A;
+  --color-accent-hover: #163834;
+
+  /* Typography */
+  --font-serif: 'Newsreader', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* Layout */
+  --content-max: 64rem;   /* 1024px */
+  --prose-max: 38rem;     /* 608px — comfortable reading width */
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2.5rem;
+  --space-xl: 4rem;
+  --space-2xl: 6rem;
+  --space-3xl: 8rem;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: var(--font-sans);
+  color: var(--color-text);
+  background: var(--color-bg);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Typography */
+h1, h2, h3, h4 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  letter-spacing: -0.018em;
+  line-height: 1.12;
+  color: var(--color-text);
+  font-optical-sizing: auto;
+}
+
+h1 {
+  font-size: clamp(2.25rem, 5vw, 3.25rem);
+  font-variation-settings: 'opsz' 60;
+}
+
+h2 {
+  font-size: clamp(1.625rem, 3.2vw, 2.125rem);
+  font-variation-settings: 'opsz' 36;
+  letter-spacing: -0.015em;
+}
+
+h3 {
+  font-size: 1.25rem;
+  font-variation-settings: 'opsz' 18;
+  letter-spacing: -0.01em;
+}
+
+h4 {
+  font-size: 1rem;
+  letter-spacing: -0.005em;
+}
+
+p {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--color-text-muted);
+}
+
+p + p {
+  margin-top: 1em;
+}
+
+a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  transition: color 0.18s ease;
+}
+
+a:hover {
+  color: var(--color-accent-hover);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.7em 1.4em;
+  font-size: 0.875rem;
+  font-weight: 500;
+  font-family: var(--font-sans);
+  border-radius: 4px;
+  text-decoration: none;
+  transition: all 0.18s ease;
+  cursor: pointer;
+  border: 0;
+  letter-spacing: 0.005em;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: var(--color-accent);
+  color: var(--color-bg);
+}
+
+.btn-primary:hover {
+  background: var(--color-accent-hover);
+  color: var(--color-bg);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--color-text);
+  border: 1px solid var(--color-text);
+}
+
+.btn-secondary:hover {
+  background: var(--color-text);
+  color: var(--color-bg);
+}
+
+/* Layout */
+.container {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.prose {
+  max-width: var(--prose-max);
+}
+
+.prose p,
+.prose ul,
+.prose ol {
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: var(--color-text-muted);
+}
+
+.prose h2 {
+  margin-top: 2.5em;
+  margin-bottom: 0.75em;
+}
+
+.prose h3 {
+  margin-top: 2em;
+  margin-bottom: 0.5em;
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 1.5em;
+  margin: 1em 0;
+}
+
+.prose li + li {
+  margin-top: 0.4em;
+}
+
+/* Eyebrow / kicker */
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-text-faint);
+}
+
+/* Subtle entrance animation */
+.fade-in {
+  animation: fadeIn 0.65s ease-out both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Accessibility */
+*:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Selection */
+::selection {
+  background: var(--color-accent);
+  color: var(--color-bg);
+}

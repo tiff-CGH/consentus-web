@@ -1,0 +1,107 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="About"
+  description="Consentus is the trusted layer for surgical informed consent in the UK — built with named clinicians, owned by no one, accountable to patients."
+>
+  <article class="about container">
+    <header class="page-header">
+      <p class="eyebrow">About</p>
+      <h1>The trusted layer for surgical informed consent.</h1>
+    </header>
+
+    <div class="prose">
+      <p class="lead">
+        Surgeons have ten to fifteen minutes to explain procedures that take
+        years to learn. Patients sign forms they don't fully understand. The
+        result is poorer decisions, more complaints, and more litigation.
+        Consentus exists to do better.
+      </p>
+
+      <h2>What we are</h2>
+      <p>
+        Consentus is a free, public library of surgical procedure videos and
+        FAQs, made by named UK consultants. Each procedure page is authored
+        and reviewed by a practising specialist with their GMC registration on
+        the page. The editorial bar is rigour, not engagement.
+      </p>
+
+      <h2>What we are not</h2>
+      <p>
+        We are not a content channel, a clinic, or a medical advice service.
+        We do not replace your consultant. We do not run ads, and we do not
+        track patients across the web. The site exists so that the
+        conversation in the consulting room can start ten minutes further
+        along than it would have otherwise.
+      </p>
+
+      <h2>How we sustain ourselves</h2>
+      <p>
+        The patient-facing library is, and will remain, free. Consentus Ltd is
+        a private company building a commercial platform sold to hospitals and
+        private clinics — embedding the same clinical content into their
+        consent pathway, with comprehension-verified audit trails for the
+        record. The free side earns the trust. The paid side funds the work.
+      </p>
+
+      <h2>Our standard</h2>
+      <p>
+        Consentus is pursuing B Corp certification. Independent of that, we
+        commit to: every procedure page authored by a named UK consultant; a
+        last-reviewed date on every page, with annual review at minimum; no
+        third-party tracking on patient-facing pages; and clear disclosure of
+        any clinical or commercial relationship that could affect editorial
+        content.
+      </p>
+
+      <h2>Founder</h2>
+      <p>
+        Consentus was founded in 2026 by [Founder name], based in London. The
+        company is incorporated as Consentus Ltd in England and Wales.
+      </p>
+
+      <h2>Advisory board</h2>
+      <p>
+        Names announced as the founding advisory board is finalised. If you
+        are a UK consultant interested in contributing —
+        <a href="/for-clinicians">we'd like to talk</a>.
+      </p>
+
+      <h2>Contact</h2>
+      <p>
+        General enquiries:
+        <a href="mailto:info@consentus.org">info@consentus.org</a>.
+      </p>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .about {
+    padding-top: var(--space-2xl);
+    padding-bottom: var(--space-xl);
+  }
+
+  .page-header {
+    margin-bottom: var(--space-lg);
+  }
+
+  .page-header .eyebrow {
+    margin-bottom: 0.75rem;
+  }
+
+  .page-header h1 {
+    max-width: 32rem;
+  }
+
+  .lead {
+    font-size: 1.25rem !important;
+    line-height: 1.55 !important;
+    color: var(--color-text) !important;
+    margin-bottom: 2rem;
+    font-family: var(--font-serif);
+    font-variation-settings: 'opsz' 18;
+  }
+</style>

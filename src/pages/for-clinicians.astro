@@ -1,0 +1,100 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="For clinicians"
+  description="Consentus is built with practising UK consultants. Author a procedure in your specialty — we handle production end-to-end."
+>
+  <article class="clinicians container">
+    <header class="page-header">
+      <p class="eyebrow">For clinicians</p>
+      <h1>Built with practising surgeons.</h1>
+    </header>
+
+    <div class="prose">
+      <p class="lead">
+        Consentus exists because the tools available for informed consent
+        haven't kept up with the legal bar set by Montgomery. We're building
+        the trusted reference, and we're building it with the people who
+        actually do the operations.
+      </p>
+
+      <h2>What we'd ask of you</h2>
+      <p>
+        A short script for a procedure in your specialty, ideally one you
+        consent for regularly. A filming session — usually two to three hours
+        in a location you're comfortable with. Editorial review of the FAQ
+        copy. An undertaking to review the page annually so the information
+        stays current.
+      </p>
+
+      <h2>What we provide</h2>
+      <p>
+        End-to-end production: scripting support, filming, editing, captions,
+        hosting, and the page itself. Your name and GMC number are on the
+        page; the editorial decisions stay with you. We provide a clear
+        contributor agreement covering IP, indemnity, and review obligations
+        — drafted to be straightforward rather than clever.
+      </p>
+
+      <h2>What we don't do</h2>
+      <p>
+        We don't run ads. We don't sell patient data. We don't promote
+        specific clinics or providers on the patient-facing pages. We don't
+        ask you to endorse anything beyond the clinical information on your
+        own page.
+      </p>
+
+      <h2>The wider mission</h2>
+      <p>
+        The patient-facing library is one half of the project. The other half
+        is a commercial platform sold to hospitals and clinics, embedding the
+        same content into their consent pathway with a verified audit trail.
+        Contributing clinicians are credited across both, and we'll talk
+        openly about the commercial model — there's no hidden agenda here.
+      </p>
+
+      <h2>Get in touch</h2>
+      <p>
+        Email <a href="mailto:info@consentus.org">info@consentus.org</a> with
+        a short note about your specialty and a procedure you'd consider
+        authoring. We'll set up a 20-minute call to discuss — no pressure to
+        commit on the call.
+      </p>
+
+      <p>
+        If you'd rather see what a finished page looks like first,
+        <a href="/procedures">browse the library</a>.
+      </p>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .clinicians {
+    padding-top: var(--space-2xl);
+    padding-bottom: var(--space-xl);
+  }
+
+  .page-header {
+    margin-bottom: var(--space-lg);
+  }
+
+  .page-header .eyebrow {
+    margin-bottom: 0.75rem;
+  }
+
+  .page-header h1 {
+    max-width: 32rem;
+  }
+
+  .lead {
+    font-size: 1.25rem !important;
+    line-height: 1.55 !important;
+    color: var(--color-text) !important;
+    margin-bottom: 2rem;
+    font-family: var(--font-serif);
+    font-variation-settings: 'opsz' 18;
+  }
+</style>

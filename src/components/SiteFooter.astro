@@ -1,0 +1,128 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <p class="wordmark-small">Consentus</p>
+        <p class="footer-tagline">The trusted layer for surgical informed consent.</p>
+      </div>
+
+      <div class="footer-col">
+        <p class="eyebrow">Library</p>
+        <ul>
+          <li><a href="/procedures">Procedures</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <p class="eyebrow">Company</p>
+        <ul>
+          <li><a href="/about">About</a></li>
+          <li><a href="/for-clinicians">For clinicians</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <p class="eyebrow">Contact</p>
+        <ul>
+          <li><a href="mailto:info@consentus.org">info@consentus.org</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p class="footer-disclaimer">
+        Consentus provides general information about surgical procedures, not personal medical advice.
+        Always discuss your specific situation with your surgeon and clinical team before making decisions about treatment.
+      </p>
+      <p class="footer-meta">
+        © {year} Consentus Ltd. Registered in England and Wales.
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: var(--space-3xl);
+    border-top: 1px solid var(--color-border);
+    background: var(--color-bg-secondary);
+    padding: var(--space-xl) 0 var(--space-lg);
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 2rem;
+    padding-bottom: var(--space-lg);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  @media (max-width: 720px) {
+    .footer-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem 1.5rem;
+    }
+    .footer-brand {
+      grid-column: 1 / -1;
+    }
+  }
+
+  .wordmark-small {
+    font-family: var(--font-serif);
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: var(--color-accent);
+    margin-bottom: 0.5rem;
+  }
+
+  .footer-tagline {
+    font-size: 0.875rem;
+    line-height: 1.55;
+    color: var(--color-text-muted);
+    max-width: 22rem;
+  }
+
+  .footer-col ul {
+    list-style: none;
+    margin-top: 0.65rem;
+  }
+
+  .footer-col li {
+    margin-top: 0.35rem;
+  }
+
+  .footer-col a {
+    font-size: 0.875rem;
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .footer-col a:hover {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .footer-bottom {
+    padding-top: var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .footer-disclaimer {
+    font-size: 0.8125rem;
+    line-height: 1.55;
+    color: var(--color-text-faint);
+    max-width: 44rem;
+  }
+
+  .footer-meta {
+    font-size: 0.75rem;
+    color: var(--color-text-faint);
+  }
+</style>

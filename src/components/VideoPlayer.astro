@@ -1,0 +1,199 @@
+---
+/**
+ * VideoPlayer
+ *
+ * Two states:
+ *  1. No video yet (streamId is undefined) — renders a "Video coming soon" placeholder.
+ *  2. Video available (streamId is set)  — renders a static poster + play button.
+ *     The Cloudflare Stream iframe is ONLY loaded when the user clicks play.
+ *
+ * Why the facade pattern matters:
+ *  - Cloudflare Stream bills per minute delivered. Loading the iframe on page-load
+ *    triggers a small amount of preloading even before play. Lazy-loading on click
+ *    keeps idle pageviews at zero delivery cost.
+ *  - It also avoids loading any third-party JavaScript or making any network
+ *    request to Cloudflare unless the user actually wants to watch.
+ */
+
+interface Props {
+  streamId?: string;
+  title: string;
+  posterUrl?: string;
+}
+
+const { streamId, title, posterUrl } = Astro.props;
+const hasVideo = Boolean(streamId);
+---
+
+<figure class="video-player">
+  {hasVideo ? (
+    <button
+      type="button"
+      class="video-facade"
+      data-stream-id={streamId}
+      aria-label={`Play video: ${title}`}
+    >
+      {posterUrl ? (
+        <img src={posterUrl} alt="" loading="lazy" decoding="async" />
+      ) : (
+        <div class="poster-fallback" aria-hidden="true"></div>
+      )}
+      <div class="play-button" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+          <path d="M8 5v14l11-7z" />
+        </svg>
+      </div>
+    </button>
+  ) : (
+    <div class="video-placeholder" role="img" aria-label="Video coming soon">
+      <div class="placeholder-inner">
+        <div class="play-button" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+            <path d="M8 5v14l11-7z" />
+          </svg>
+        </div>
+        <p class="placeholder-text">Video coming soon</p>
+      </div>
+    </div>
+  )}
+</figure>
+
+<style>
+  .video-player {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    margin: 0;
+    background: var(--color-text);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .video-facade,
+  .video-placeholder {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    padding: 0;
+    background: var(--color-text);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    display: block;
+  }
+
+  .video-placeholder {
+    cursor: default;
+  }
+
+  .video-facade img,
+  .poster-fallback {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .poster-fallback {
+    background:
+      radial-gradient(ellipse at center, #2a2a2a 0%, #1a1a1a 70%);
+  }
+
+  .placeholder-inner {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    background:
+      radial-gradient(ellipse at center, #2a2a2a 0%, #1a1a1a 70%);
+  }
+
+  .play-button {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--color-bg);
+    color: var(--color-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.18s ease, background 0.18s ease;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .placeholder-inner .play-button {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    opacity: 0.85;
+  }
+
+  .play-button svg {
+    margin-left: 3px; /* optical centering of the play triangle */
+  }
+
+  .video-facade:hover .play-button,
+  .video-facade:focus-visible .play-button {
+    transform: translate(-50%, -50%) scale(1.06);
+    background: #fff;
+  }
+
+  .placeholder-text {
+    font-size: 0.875rem;
+    color: rgba(250, 250, 247, 0.7);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    margin: 0;
+    position: relative;
+  }
+
+  .video-iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+  }
+</style>
+
+<script>
+  /*
+    Lazy-load Cloudflare Stream iframe on click.
+    Replace CLOUDFLARE_CUSTOMER_CODE with your account's Stream subdomain
+    code once you set up Stream. You can find it in the dashboard under
+    Stream → any video → "Embed" → it's the part between "customer-" and
+    ".cloudflarestream.com" in the embed URL.
+   */
+  const CLOUDFLARE_CUSTOMER_CODE = 'CUSTOMER_CODE_PLACEHOLDER';
+
+  function buildStreamUrl(streamId: string): string {
+    // Universal URL works for any account; the customer-specific URL is
+    // marginally faster to first-byte. Either is fine to start with.
+    if (CLOUDFLARE_CUSTOMER_CODE && CLOUDFLARE_CUSTOMER_CODE !== 'CUSTOMER_CODE_PLACEHOLDER') {
+      return `https://customer-${CLOUDFLARE_CUSTOMER_CODE}.cloudflarestream.com/${streamId}/iframe?autoplay=true&primaryColor=%231F4E4A`;
+    }
+    return `https://iframe.cloudflarestream.com/${streamId}?autoplay=true&primaryColor=%231F4E4A`;
+  }
+
+  document.querySelectorAll<HTMLButtonElement>('.video-facade').forEach((button) => {
+    button.addEventListener('click', () => {
+      const streamId = button.dataset.streamId;
+      if (!streamId) return;
+
+      const iframe = document.createElement('iframe');
+      iframe.src = buildStreamUrl(streamId);
+      iframe.className = 'video-iframe';
+      iframe.allow = 'accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;';
+      iframe.allowFullscreen = true;
+      iframe.title = button.getAttribute('aria-label') ?? 'Video player';
+
+      button.replaceWith(iframe);
+    });
+  });
+</script>

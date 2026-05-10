@@ -1,0 +1,85 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProcedureCard from '../../components/ProcedureCard.astro';
+import { getCollection } from 'astro:content';
+
+const all = await getCollection('procedures');
+const procedures = all
+  .filter((entry) => !entry.data.draft || import.meta.env.DEV)
+  .sort((a, b) => a.data.title.localeCompare(b.data.title));
+---
+
+<BaseLayout
+  title="Procedures"
+  description="Browse the Consentus library of surgical procedure videos and FAQs, made by named UK consultants."
+>
+  <section class="page-header container">
+    <p class="eyebrow">The library</p>
+    <h1>Procedures</h1>
+    <p class="prose lead">
+      A growing library of surgical procedures, each authored and reviewed by a
+      named UK consultant in the relevant specialty. Videos are short. FAQs are
+      structured. The goal is preparation, not persuasion.
+    </p>
+  </section>
+
+  <section class="container procedures-list">
+    {procedures.length === 0 ? (
+      <p class="empty-state">
+        Procedures are being prepared. The first will be published shortly.
+      </p>
+    ) : (
+      <ul>
+        {procedures.map((entry) => (
+          <li>
+            <ProcedureCard
+              href={`/procedures/${entry.id}`}
+              title={entry.data.title}
+              description={entry.data.summary}
+              clinician={entry.data.clinician}
+              gmcNumber={entry.data.gmcNumber}
+              lastReviewed={entry.data.lastReviewed}
+            />
+          </li>
+        ))}
+      </ul>
+    )}
+  </section>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding-top: var(--space-2xl);
+    padding-bottom: var(--space-lg);
+  }
+
+  .page-header .eyebrow {
+    margin-bottom: 0.75rem;
+  }
+
+  .page-header h1 {
+    margin-bottom: 1.25rem;
+  }
+
+  .lead {
+    font-size: 1.125rem;
+    line-height: 1.65;
+  }
+
+  .procedures-list {
+    padding-bottom: var(--space-xl);
+  }
+
+  .procedures-list ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 56rem;
+  }
+
+  .empty-state {
+    color: var(--color-text-faint);
+    font-style: italic;
+  }
+</style>

@@ -1,0 +1,278 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import VideoPlayer from '../../components/VideoPlayer.astro';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const procedures = await getCollection('procedures');
+  return procedures.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<'procedures'>;
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const { data } = entry;
+
+const reviewedFormatted = new Date(data.lastReviewed).toLocaleDateString('en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+---
+
+<BaseLayout
+  title={data.title}
+  description={data.summary}
+>
+  <article class="procedure">
+    <!-- Header / attribution -->
+    <header class="procedure-header container">
+      <p class="eyebrow">{data.specialty}</p>
+      <h1>{data.title}</h1>
+      <p class="summary">{data.summary}</p>
+
+      <dl class="attribution">
+        <div>
+          <dt>Author</dt>
+          <dd>{data.clinician}</dd>
+        </div>
+        <div>
+          <dt>GMC number</dt>
+          <dd>{data.gmcNumber}</dd>
+        </div>
+        <div>
+          <dt>Last reviewed</dt>
+          <dd>
+            <time datetime={data.lastReviewed}>{reviewedFormatted}</time>
+          </dd>
+        </div>
+      </dl>
+    </header>
+
+    <!-- Video -->
+    <section class="procedure-video container">
+      <VideoPlayer
+        streamId={data.streamId}
+        posterUrl={data.posterUrl}
+        title={data.title}
+      />
+    </section>
+
+    <!-- Body content -->
+    <section class="procedure-body container">
+      <div class="prose">
+        <Content />
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    {data.faqs.length > 0 && (
+      <section class="procedure-faq container">
+        <h2>Frequently asked questions</h2>
+        <div class="faq-list">
+          {data.faqs.map((faq, idx) => (
+            <details class="faq-item" open={idx === 0}>
+              <summary>
+                <span class="faq-question">{faq.question}</span>
+                <span class="faq-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 9l6 6 6-6" />
+                  </svg>
+                </span>
+              </summary>
+              <div class="faq-answer">
+                <p>{faq.answer}</p>
+              </div>
+            </details>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- Disclaimer -->
+    <section class="procedure-disclaimer container">
+      <div class="disclaimer-box">
+        <p class="eyebrow">Important</p>
+        <p>
+          This page provides general information to help you prepare for a
+          conversation with your surgeon. It is not personal medical advice and
+          does not replace clinical consultation. Every patient is different.
+          Always discuss your specific situation, anatomy, and goals with your
+          consulting team.
+        </p>
+      </div>
+    </section>
+  </article>
+</BaseLayout>
+
+<style>
+  .procedure {
+    padding-top: var(--space-xl);
+  }
+
+  .procedure-header {
+    padding-bottom: var(--space-lg);
+    max-width: 56rem;
+  }
+
+  .procedure-header .eyebrow {
+    margin-bottom: 0.75rem;
+  }
+
+  .procedure-header h1 {
+    margin-bottom: 1.25rem;
+    max-width: 32rem;
+  }
+
+  .summary {
+    font-size: 1.125rem;
+    line-height: 1.65;
+    color: var(--color-text-muted);
+    max-width: 38rem;
+    margin-bottom: 2rem;
+  }
+
+  .attribution {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2.5rem;
+    padding: 1.25rem 0;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .attribution > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .attribution dt {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-faint);
+    font-weight: 500;
+  }
+
+  .attribution dd {
+    font-size: 0.9375rem;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .procedure-video {
+    padding-bottom: var(--space-xl);
+    max-width: 56rem;
+  }
+
+  .procedure-body {
+    padding-bottom: var(--space-xl);
+  }
+
+  .procedure-faq {
+    padding-bottom: var(--space-xl);
+    max-width: 48rem;
+  }
+
+  .procedure-faq h2 {
+    margin-bottom: 1.5rem;
+  }
+
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .faq-item {
+    border-top: 1px solid var(--color-border);
+    padding: 0.25rem 0;
+  }
+
+  .faq-item:last-child {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .faq-item summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.1rem 0;
+    cursor: pointer;
+    list-style: none;
+    transition: color 0.15s ease;
+  }
+
+  .faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-item summary:hover {
+    color: var(--color-accent);
+  }
+
+  .faq-question {
+    font-family: var(--font-serif);
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: var(--color-text);
+    letter-spacing: -0.01em;
+    font-variation-settings: 'opsz' 18;
+  }
+
+  .faq-icon {
+    color: var(--color-text-faint);
+    transition: transform 0.18s ease;
+    flex-shrink: 0;
+  }
+
+  .faq-item[open] .faq-icon {
+    transform: rotate(180deg);
+  }
+
+  .faq-answer {
+    padding: 0 0 1.25rem;
+    max-width: 38rem;
+  }
+
+  .faq-answer p {
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  .procedure-disclaimer {
+    padding-bottom: var(--space-xl);
+    max-width: 48rem;
+  }
+
+  .disclaimer-box {
+    padding: 1.5rem;
+    background: var(--color-bg-secondary);
+    border-left: 2px solid var(--color-accent);
+    border-radius: 0;
+  }
+
+  .disclaimer-box .eyebrow {
+    margin-bottom: 0.6rem;
+    color: var(--color-accent);
+  }
+
+  .disclaimer-box p {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--color-text-muted);
+  }
+
+  @media (max-width: 540px) {
+    .attribution {
+      gap: 1.25rem;
+    }
+  }
+</style>
