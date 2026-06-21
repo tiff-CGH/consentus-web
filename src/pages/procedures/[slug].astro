@@ -30,6 +30,24 @@ const reviewedFormatted = new Date(data.lastReviewed).toLocaleDateString('en-GB'
   title={data.title}
   description={data.summary}
 >
+  <!-- Disclaimer modal -->
+  <div id="disclaimer-modal" role="dialog" aria-modal="true" aria-labelledby="disclaimer-modal-title">
+    <div class="modal-backdrop"></div>
+    <div class="modal-box">
+      <p class="eyebrow" id="disclaimer-modal-title">Important</p>
+      <p>
+        This page provides general information to help you prepare for a
+        conversation with your surgeon. It is not personal medical advice and
+        does not replace clinical consultation. Every patient is different.
+        Always discuss your specific situation, anatomy, and goals with your
+        consulting team.
+      </p>
+      <div class="modal-footer">
+        <button type="button" id="disclaimer-accept" class="btn btn-primary">I understand</button>
+      </div>
+    </div>
+  </div>
+
   <article class="procedure">
     <!-- Header / attribution -->
     <header class="procedure-header container">
@@ -112,6 +130,52 @@ const reviewedFormatted = new Date(data.lastReviewed).toLocaleDateString('en-GB'
 </BaseLayout>
 
 <style>
+  #disclaimer-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+  }
+
+  .modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(26, 26, 26, 0.55);
+    backdrop-filter: blur(2px);
+  }
+
+  .modal-box {
+    position: relative;
+    z-index: 1;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-accent);
+    border-radius: 4px;
+    padding: 2rem;
+    max-width: 36rem;
+    width: 100%;
+  }
+
+  .modal-box .eyebrow {
+    color: var(--color-accent);
+    margin-bottom: 0.75rem;
+  }
+
+  .modal-box > p {
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    color: var(--color-text-muted);
+    margin-bottom: 1.75rem;
+  }
+
+  .modal-footer {
+    display: flex;
+    justify-content: flex-start;
+  }
+
   .procedure {
     padding-top: var(--space-xl);
   }
@@ -276,3 +340,15 @@ const reviewedFormatted = new Date(data.lastReviewed).toLocaleDateString('en-GB'
     }
   }
 </style>
+
+<script>
+  const modal = document.getElementById('disclaimer-modal');
+  const btn = document.getElementById('disclaimer-accept');
+
+  document.body.style.overflow = 'hidden';
+
+  btn?.addEventListener('click', () => {
+    modal?.remove();
+    document.body.style.overflow = '';
+  });
+</script>
